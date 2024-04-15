@@ -168,7 +168,8 @@ var LevelBuilder = Level.extend({
     this.exitLevel();
 
     setTimeout(function() {
-      Main.getSandbox().buildLevel(command, deferred);
+      // Main.getSandbox().buildLevel(command, deferred);
+      Main.getHostSession().buildLevel(command, deferred);
     }, this.getAnimationTime() * 1.5);
   },
 

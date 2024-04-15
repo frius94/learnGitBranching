@@ -56,6 +56,14 @@ AppConstants.StoreSubscribePrototype,
         break;
       case ActionTypes.LEVEL_SOLVED:
         _numLevelsSolved++;
+
+        const sessionHash = new URLSearchParams(window.location.search).get("session");
+        const email = new URLSearchParams(window.location.search).get("email");
+
+        fetch(`http://localhost:3000/updateprogress?session=${sessionHash}&email=${email}`)
+          .then(response => response.json())
+          .then(response => console.log(response))
+
         shouldInform = true;
         break;
       case ActionTypes.DISABLE_LEVEL_INSTRUCTIONS:

@@ -36,6 +36,7 @@ var events = Object.assign(
 events.setMaxListeners(0);
 var commandUI;
 var sandbox;
+var hostSession;
 var eventBaton;
 var levelDropdown;
 
@@ -52,12 +53,14 @@ var init = function() {
     *   - handling window.focus and zoom events
   **/
   var Sandbox = require('../sandbox/').Sandbox;
+  var HostSession = require('../hostSession/').HostSession;
   var EventBaton = require('../util/eventBaton').EventBaton;
   var LevelDropdownView = require('../views/levelDropdownView').LevelDropdownView;
 
   eventBaton = new EventBaton();
   commandUI = new CommandUI();
   sandbox = new Sandbox();
+  hostSession = new HostSession();
   levelDropdown = new LevelDropdownView({
     wait: true
   });
@@ -70,7 +73,8 @@ var init = function() {
   events.on('vcsModeChange', vcsModeRefresh);
 
   initRootEvents(eventBaton);
-  initDemo(sandbox);
+  // initDemo(sandbox);
+  initDemo(hostSession);
   // unfortunate global export for casper tests
   window.LocaleStore = LocaleStore;
   window.LocaleActions = LocaleActions;
@@ -177,14 +181,16 @@ var initRootEvents = function(eventBaton) {
   $(window).trigger('resize');
 };
 
-var initDemo = function(sandbox) {
+// var initDemo = function(sandbox) {
+var initDemo = function(hostSession) {
   var params = util.parseQueryString(window.location.href);
 
   // being the smart programmer I am (not), I don't include a true value on demo, so
   // I have to check if the key exists here
   var commands;
   if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent) || /android/i.test(navigator.userAgent)) {
-    sandbox.mainVis.customEvents.on('gitEngineReady', function() {
+    // sandbox.mainVis.customEvents.on('gitEngineReady', function() {
+    hostSession.mainVis.customEvents.on('gitEngineReady', function() {
       eventBaton.trigger('commandSubmitted', 'mobile alert');
     });
   }
@@ -273,7 +279,8 @@ var initDemo = function(sandbox) {
       );*/
   }
   if (commands) {
-    sandbox.mainVis.customEvents.on('gitEngineReady', function() {
+    // sandbox.mainVis.customEvents.on('gitEngineReady', function() {
+    hostSession.mainVis.customEvents.on('gitEngineReady', function() {
       eventBaton.trigger('commandSubmitted', commands.join(''));
     });
   }
@@ -288,7 +295,8 @@ var initDemo = function(sandbox) {
 
   if (params.command) {
     var command = unescape(params.command);
-    sandbox.mainVis.customEvents.on('gitEngineReady', function() {
+    // sandbox.mainVis.customEvents.on('gitEngineReady', function() {
+    hostSession.mainVis.customEvents.on('gitEngineReady', function() {
       eventBaton.trigger('commandSubmitted', command);
     });
   }
@@ -350,6 +358,10 @@ exports.getEvents = function() {
 
 exports.getSandbox = function() {
   return sandbox;
+};
+
+exports.getHostSession = function() {
+  return hostSession;
 };
 
 exports.getEventBaton = function() {

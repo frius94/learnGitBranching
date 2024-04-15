@@ -9,6 +9,7 @@ var log = require('../log');
 
 var Errors = require('../util/errors');
 var Sandbox = require('../sandbox/').Sandbox;
+var HostSession = require('../hostSession/').HostSession;
 var GlobalStateActions = require('../actions/GlobalStateActions');
 var GlobalStateStore = require('../stores/GlobalStateStore');
 var LevelActions = require('../actions/LevelActions');
@@ -37,7 +38,8 @@ var regexMap = {
 
 var parse = util.genParseCommand(regexMap, 'processLevelCommand');
 
-var Level = Sandbox.extend({
+// var Level = Sandbox.extend({
+var Level = HostSession.extend({
   initialize: function(options) {
     options = options || {};
     options.level = options.level || {};
@@ -628,14 +630,16 @@ var Level = Sandbox.extend({
   buildLevel: function(command, deferred) {
     this.exitLevel();
     setTimeout(function() {
-      Main.getSandbox().buildLevel(command, deferred);
+      // Main.getSandbox().buildLevel(command, deferred);
+      Main.getHostSession().buildLevel(command, deferred);
     }, this.getAnimationTime() * 1.5);
   },
 
   importLevel: function(command, deferred) {
     this.exitLevel();
     setTimeout(function() {
-      Main.getSandbox().importLevel(command, deferred);
+      // Main.getSandbox().importLevel(command, deferred);
+      Main.getHostSession().importLevel(command, deferred);
     }, this.getAnimationTime() * 1.5);
   },
 
@@ -643,7 +647,8 @@ var Level = Sandbox.extend({
     this.exitLevel();
 
     setTimeout(function() {
-      Main.getSandbox().startLevel(command, deferred);
+      // Main.getSandbox().startLevel(command, deferred);
+      Main.getHostSession().startLevel(command, deferred);
     }, this.getAnimationTime() * 1.5);
     // wow! that was simple :D
   },

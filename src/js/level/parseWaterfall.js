@@ -1,6 +1,7 @@
 var GitCommands = require('../git/commands');
 var Commands = require('../commands');
 var SandboxCommands = require('../sandbox/commands');
+var HostSessionCommands = require('../hostSession/commands');
 
 // more or less a static class
 var ParseWaterfall = function(options) {
@@ -12,7 +13,8 @@ var ParseWaterfall = function(options) {
 
   this.instantWaterfall = options.instantWaterfall || [
     GitCommands.instantCommands,
-    SandboxCommands.instantCommands
+    // SandboxCommands.instantCommands
+    HostSessionCommands.instantCommands
   ];
 
   // defer the parse waterfall until later...
@@ -29,9 +31,12 @@ ParseWaterfall.prototype.initParseWaterfall = function() {
   // level too early (which barfs our init)
   this.parseWaterfall = this.options.parseWaterfall || [
     Commands.parse,
-    SandboxCommands.parse,
-    SandboxCommands.getOptimisticLevelParse(),
-    SandboxCommands.getOptimisticLevelBuilderParse()
+    // SandboxCommands.parse,
+    // SandboxCommands.getOptimisticLevelParse(),
+    // SandboxCommands.getOptimisticLevelBuilderParse()
+    HostSessionCommands.parse,
+    HostSessionCommands.getOptimisticLevelParse(),
+    HostSessionCommands.getOptimisticLevelBuilderParse()
   ];
 };
 
